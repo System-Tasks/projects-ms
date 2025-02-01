@@ -1,8 +1,9 @@
-import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaClient } from '@prisma/client';
 import { PaginationDto } from 'src/common';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ProjectsService extends PrismaClient implements OnModuleInit{
@@ -16,7 +17,6 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
     return this.project.create({
       data: createProjectDto
     });
-    // return createProjectDto;
   }
 
   async findAll(paginationDto: PaginationDto) {
@@ -46,7 +46,10 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
     });
 
     if( !project ){
-      throw new NotFoundException(`Project with id ${id} not found`)
+      throw new RpcException({
+        message: `Project with id ${id} not found`,
+        status: HttpStatus.BAD_REQUEST
+      });
     }
 
     return project;
