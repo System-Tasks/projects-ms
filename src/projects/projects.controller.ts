@@ -15,8 +15,8 @@ export class ProjectsController {
   }
 
   @MessagePattern({ cmd:'find_all_projects' })
-  findAll( @Payload() paginationDto:PaginationDto) {
-    return this.projectsService.findAll(paginationDto);
+  findAllProjectsTeam(@Payload() { id, ...paginationDto }: { id: string } & PaginationDto) {
+    return this.projectsService.findAll(id, paginationDto);
   }
 
   @MessagePattern({ cmd:'find_one_project' })

@@ -19,7 +19,7 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
     });
   }
 
-  async findAll(paginationDto: PaginationDto) {
+  async findAll(id:string, paginationDto: PaginationDto) {
 
     const { page, limit } = paginationDto;
 
@@ -28,6 +28,7 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
 
     return {
       data: await this.project.findMany({
+        where: { teamId: id },
         skip: ( page! - 1) * limit!,
         take: limit,
       }),
@@ -36,7 +37,6 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
         page,
       }
     }
-
   }
 
   async findOne(id: number) {
