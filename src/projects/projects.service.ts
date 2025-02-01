@@ -25,7 +25,6 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
 
     const totalPages = await this.project.count();
 
-    // const lastPage = Math.ceil( totalPages / limit!);
 
     return {
       data: await this.project.findMany({
