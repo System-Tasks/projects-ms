@@ -19,23 +19,11 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
     });
   }
 
-  async findAll(id:string, paginationDto: PaginationDto) {
-
-    const { page, limit } = paginationDto;
-
-    const totalPages = await this.project.count();
-
-
+  async findAll(id: string) {
     return {
       data: await this.project.findMany({
         where: { teamId: id },
-        skip: ( page! - 1) * limit!,
-        take: limit,
-      }),
-      meta: {
-        total: totalPages,
-        page,
-      }
+      })
     }
   }
 
