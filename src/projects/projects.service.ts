@@ -20,12 +20,19 @@ export class ProjectsService extends PrismaClient implements OnModuleInit{
   }
 
   async findAll(id: string) {
-    return {
-      data: await this.project.findMany({
-        where: { teamId: id },
-      })
+    const projects = await this.project.findMany({
+      where: { teamId: id },
+    });
+
+    if( !projects ){
+      throw new RpcException({
+        message: `Project with teamId ${id} not found`,
+        status: HttpStatus.BAD_REQUEST
+      });
     }
-  }
+
+    return projects;
+  } 
 
   async findOne(id: number) {
     const project = await this.project.findFirst({
